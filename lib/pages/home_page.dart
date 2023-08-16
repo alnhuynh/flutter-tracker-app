@@ -1,3 +1,25 @@
-// git remote add origin https://github.com/alnhuynh/flutter-tracker-app.git
-// git branch -M main
-// git push -u origin main
+import 'package:flutter/material.dart';
+import 'package:tracker_app/components/habit_tile.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[300],
+      body: ListView(
+        children: [
+          HabitTile()
+        ],
+      ),
+    );
+  }
+}
