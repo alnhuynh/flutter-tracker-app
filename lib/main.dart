@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tracker_app/pages/home_page.dart';
 
-void main() {
+void main() async {
+  // local database setup
+  await Hive.initFlutter();
+  await Hive.openBox("Tracker_DB");
+  
   runApp(const MainApp());
 }
 
