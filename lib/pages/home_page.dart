@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tracker_app/components/habit_tile.dart';
+import 'package:tracker_app/components/month_summary.dart';
 import 'package:tracker_app/components/my_fab.dart';
 import 'package:tracker_app/data/tracker_db.dart';
 import 'package:tracker_app/components/my_alert_box.dart';
@@ -63,6 +64,7 @@ class _HomePageState extends State<HomePage> {
     });
 
     closeHabitDialog();
+    db.updateDatabase();
   }
   
   void closeHabitDialog() {
@@ -90,30 +92,44 @@ class _HomePageState extends State<HomePage> {
     });
 
     closeHabitDialog();
+    db.updateDatabase();
   }
 
   void deleteHabit(int index) {
     setState(() {
       db.taskList.removeAt(index);
     });
+    db.updateDatabase();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: AppBar(
+      //   title: Text(''),
+      // ),
       backgroundColor: Colors.grey[300],
       floatingActionButton: MyFloatingActionButton(onPressed: createNewHabit),
-      body: ListView.builder(
-        itemCount: db.taskList.length,
-        itemBuilder: (context, index) {
-          return HabitTile(
-            habitName: db.taskList[index][0],
-            habitCompleted: db.taskList[index][1],
-            onChanged: (value) => checkBoxTapped(value, index),
-            settingsTapped: (context) => openHabitSettings(index),
-            deleteTapped: (context) => deleteHabit(index,)
-          );
-        },
+      body: Column( // can also use ListView ?
+        children: [
+          MonthlySummary(datasets: db.heatMapDataSet,
+          startDate: _myBox.get("START_DATE"),),
+          
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: db.taskList.length,
+            itemBuilder: (context, index) {
+              return HabitTile(
+                habitName: db.taskList[index][0],
+                habitCompleted: db.taskList[index][1],
+                onChanged: (value) => checkBoxTapped(value, index),
+                settingsTapped: (context) => openHabitSettings(index),
+                deleteTapped: (context) => deleteHabit(index),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
